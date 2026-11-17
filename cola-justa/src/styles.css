@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #0f172a;
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #dbe7ff;
+  --color-brand-500: #2f5bea;
+  --color-brand-600: #1f45c9;
+  --color-brand-700: #1a379f;
+  --color-brand-900: #0d1b4f;
+  --color-sun-400: #ffc21a;
+  --color-sun-500: #f5a800;
+  --color-good-500: #12a150;
+  --color-bad-500: #e2463b;
+}
+
+html,
+body {
+  @apply bg-slate-50 text-ink antialiased;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.animate-pop { animation: pop 0.45s ease-out both; }

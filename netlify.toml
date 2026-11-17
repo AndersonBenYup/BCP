@@ -1,0 +1,35 @@
+# Cola Justa: SPA Angular estática. Datos mockeados en el navegador (localStorage), sin backend.
+[build]
+  base    = "cola-justa"
+  command = "npm ci && npm run build"
+  publish = "dist/cola-justa/browser"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Rutas del SPA (/agencia/..., /pantalla/..., /panel) → index.html
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Archivos con hash: caché de 1 año. index.html: siempre fresco.
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "no-cache"
