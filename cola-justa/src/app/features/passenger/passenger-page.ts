@@ -5,10 +5,12 @@ import { QueueRepository } from '../../shared/data-access/queue.repository';
 import { getDeviceId } from '../../core/device/device-id';
 import { RULES } from '../../shared/domain/queue-rules';
 import { formatTurnLabel } from '../../shared/ui/turn-label';
+import { QrCode } from '../../shared/ui/qr-code';
+import { Turn } from '../../shared/models/models';
 
 @Component({
   selector: 'app-passenger-page',
-  imports: [DatePipe, RouterLink],
+  imports: [DatePipe, RouterLink, QrCode],
   template: `
     <div class="mx-auto max-w-md">
       @if (stop(); as s) {
@@ -20,6 +22,10 @@ import { formatTurnLabel } from '../../shared/ui/turn-label';
           @if (activeTurn(); as turn) {
             <p class="text-center text-sm font-semibold text-slate-500">Tu turno</p>
             <p class="animate-pop text-center text-8xl font-extrabold tabular-nums text-brand-700">{{ label(turn) }}</p>
+            <div class="mx-auto mt-3 flex w-fit items-center gap-3 rounded-2xl bg-brand-50 p-3">
+              <app-qr-code class="w-28" [value]="ticketCode(turn)" alt="QR de tu turno para mostrar en ventanilla" />
+              <p class="max-w-36 text-sm text-slate-600"><b class="text-brand-900">Tu ticket digital.</b> Muéstralo en ventanilla cuando llamen tu número.</p>
+            </div>
             @if (ahead() === 0) {
               <p class="mt-2 rounded-xl bg-good-500/10 py-2 text-center font-bold text-good-500">¡Es tu turno! Acércate a la ventanilla</p>
               <button (click)="board(turn.id)" class="mt-4 w-full rounded-xl bg-good-500 py-3.5 font-bold text-white hover:brightness-95">
@@ -127,6 +133,11 @@ export class PassengerPage {
   });
 
   protected label = formatTurnLabel;
+
+  /** Código que lee la ventanilla para validar la atención del turno. */
+  protected ticketCode(turn: Turn): string {
+    return `COLAJUSTA|${turn.stopId}|${turn.number}|${turn.id}`;
+  }
 
   take(): void {
     this.message.set(null);
